@@ -6,13 +6,10 @@ public class CubeCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Si choca con la pared, se rompe sin dar puntos
-        if (collision.gameObject.name == "Pared" || collision.gameObject.name == "Pared (1)")
-        {
-            Destroy(gameObject);
-        }
-        // Si choca da 1 punto
-        else if (collision.gameObject.layer != LayerMask.NameToLayer("Cube"))
+        // Comprobamos si choca
+        string objName = collision.gameObject.name.ToLower();
+
+        if (objName.Contains("hand") || objName.Contains("finger") || objName.Contains("bone") || collision.gameObject.CompareTag("Stick"))
         {
             gameManager.AddScore(1);
             Destroy(gameObject);

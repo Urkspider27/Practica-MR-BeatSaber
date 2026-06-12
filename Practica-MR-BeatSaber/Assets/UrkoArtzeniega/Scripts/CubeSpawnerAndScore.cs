@@ -12,25 +12,21 @@ public class CubeSpawnerAndScore : MonoBehaviour
     public float destinationOffsetRange = 1f;
 
     public GameObject sableDoble;
-    // Guardamos la altura de la camara
     private float fixedHeadHeight;
 
     void Start()
     {
-        Debug.Log("sableDoble" + PlayerPrefs.GetInt("sableDoble"));
         if (PlayerPrefs.GetInt("sableDoble") == 0)
         {
-            Debug.Log("sableDoble" + PlayerPrefs.GetInt("sableDoble"));
             if (sableDoble != null) sableDoble.SetActive(false);
         }
 
         fixedHeadHeight = Camera.main.transform.position.y;
 
         int cubeLayer = LayerMask.NameToLayer("Cube");
-
         if (cubeLayer < 0)
         {
-            Debug.LogError("La capa Cube no esta creada.");
+            Debug.LogError("La capa 'Cube' no esta definida.");
             return;
         }
 
@@ -48,7 +44,6 @@ public class CubeSpawnerAndScore : MonoBehaviour
 
     void SpawnCube()
     {
-        // Posicion inicial del cubo
         Vector3 spawnPos = Camera.main.transform.position + Camera.main.transform.forward * spawnDistance;
         spawnPos.y = fixedHeadHeight;
 
@@ -78,7 +73,6 @@ public class CubeSpawnerAndScore : MonoBehaviour
         else
         {
             score += amount;
-            Debug.Log("Score: " + score);
             scoreText.text = score.ToString();
         }
     }
