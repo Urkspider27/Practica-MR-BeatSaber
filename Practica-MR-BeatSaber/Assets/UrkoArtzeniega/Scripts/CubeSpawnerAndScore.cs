@@ -12,7 +12,7 @@ public class CubeSpawnerAndScore : MonoBehaviour
     public float destinationOffsetRange = 1f;
 
     public GameObject sableDoble;
-    // Almacena la altura inicial de la cabeza (posicion de la camara)
+    // Guardamos la altura de la camara
     private float fixedHeadHeight;
 
     void Start()
@@ -23,18 +23,17 @@ public class CubeSpawnerAndScore : MonoBehaviour
             Debug.Log("sableDoble" + PlayerPrefs.GetInt("sableDoble"));
             if (sableDoble != null) sableDoble.SetActive(false);
         }
-        // Al inicio se guarda la altura actual de la camara
+
         fixedHeadHeight = Camera.main.transform.position.y;
 
         int cubeLayer = LayerMask.NameToLayer("Cube");
 
         if (cubeLayer < 0)
         {
-            Debug.LogError("La capa 'Cube' no esta definida. Asegurate de crearla en Project Settings > Tags and Layers.");
+            Debug.LogError("La capa Cube no esta creada.");
             return;
         }
 
-        // Quitamos el bucle restrictivo de colisiones para que funcione con las manos
         StartCoroutine(SpawnCubes());
     }
 
@@ -49,22 +48,20 @@ public class CubeSpawnerAndScore : MonoBehaviour
 
     void SpawnCube()
     {
-        // Calcula la posicion de spawn
+        // Posicion inicial del cubo
         Vector3 spawnPos = Camera.main.transform.position + Camera.main.transform.forward * spawnDistance;
         spawnPos.y = fixedHeadHeight;
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = spawnPos;
 
-        // Reducir el tamano del cubo
         cube.transform.localScale *= 0.1f;
-
         cube.layer = LayerMask.NameToLayer("Cube");
 
         Rigidbody rb = cube.AddComponent<Rigidbody>();
         rb.useGravity = false;
-        float offset = Random.Range(-destinationOffsetRange, destinationOffsetRange);
 
+        float offset = Random.Range(-destinationOffsetRange, destinationOffsetRange);
         Vector3 direction = (new Vector3(Camera.main.transform.position.x + offset, Camera.main.transform.position.y, Camera.main.transform.position.z) - spawnPos).normalized;
         rb.linearVelocity = direction * cubeSpeed;
 

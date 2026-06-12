@@ -6,12 +6,12 @@ public class CubeCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Si el cubo choca contra las paredes del escenario, se destruye sin sumar puntos
+        // Si choca con la pared, se rompe sin dar puntos
         if (collision.gameObject.name == "Pared" || collision.gameObject.name == "Pared (1)")
         {
             Destroy(gameObject);
         }
-        // Si choca contra cualquier otra cosa (nuestras manos), suma punto y lo rompemos
+        // Si choca da 1 punto
         else if (collision.gameObject.layer != LayerMask.NameToLayer("Cube"))
         {
             gameManager.AddScore(1);
