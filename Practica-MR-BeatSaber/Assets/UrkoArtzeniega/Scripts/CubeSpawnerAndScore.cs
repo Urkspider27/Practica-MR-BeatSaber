@@ -26,7 +26,7 @@ public class CubeSpawnerAndScore : MonoBehaviour
         int cubeLayer = LayerMask.NameToLayer("Cube");
         if (cubeLayer < 0)
         {
-            Debug.LogError("La capa 'Cube' no esta definida.");
+            Debug.LogError("Falta la capa Cube");
             return;
         }
 
@@ -49,12 +49,14 @@ public class CubeSpawnerAndScore : MonoBehaviour
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = spawnPos;
-
         cube.transform.localScale *= 0.1f;
         cube.layer = LayerMask.NameToLayer("Cube");
 
         Rigidbody rb = cube.AddComponent<Rigidbody>();
         rb.useGravity = false;
+
+        // Evita que el cubo atraviese las manos en velocidades altas
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         float offset = Random.Range(-destinationOffsetRange, destinationOffsetRange);
         Vector3 direction = (new Vector3(Camera.main.transform.position.x + offset, Camera.main.transform.position.y, Camera.main.transform.position.z) - spawnPos).normalized;
@@ -66,14 +68,16 @@ public class CubeSpawnerAndScore : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        if (score >= PlayerPrefs.GetInt("puntObj"))
+        score += amount;
+        scoreText.text = score.ToString();
+
+        // Si se juega la escena suelta el objetivo sera 10 por defecto
+        int target = PlayerPrefs.GetInt("puntObj");
+        if (target <= 0) target = 10;
+
+        if (score >= target)
         {
             scoreText.text = "FIN";
-        }
-        else
-        {
-            score += amount;
-            scoreText.text = score.ToString();
         }
     }
 }

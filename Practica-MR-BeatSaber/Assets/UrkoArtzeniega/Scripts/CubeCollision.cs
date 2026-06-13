@@ -6,10 +6,18 @@ public class CubeCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Comprobamos si choca
-        string objName = collision.gameObject.name.ToLower();
+        CheckHit(collision.gameObject);
+    }
 
-        if (objName.Contains("hand") || objName.Contains("finger") || objName.Contains("bone") || collision.gameObject.CompareTag("Stick"))
+    void OnTriggerEnter(Collider other)
+    {
+        CheckHit(other.gameObject);
+    }
+
+    void CheckHit(GameObject hitObject)
+    {
+        // Si entra en contacto con las manos o el stick antiguo, suma y rompe
+        if (hitObject.CompareTag("Stick") || hitObject.name.ToLower().Contains("hand") || hitObject.GetComponent<Rigidbody>() != null)
         {
             gameManager.AddScore(1);
             Destroy(gameObject);
